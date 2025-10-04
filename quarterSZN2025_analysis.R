@@ -149,15 +149,18 @@ ggplot(margin_victory, aes(x=expectedWins,y=abs_diff,colour = abbrev))+geom_poin
 #   arrange(desc(rb_points))
 
 
-ggplot(qzn_data %>% 
-         filter(position == "RB") %>% 
-         group_by(playerId, firstName, lastName) %>% 
-         summarize(rb_points = sum(actualScore, na.rm = TRUE)) %>% 
-         arrange(desc(rb_points)),
-       aes(x = rb_points, y = reorder(paste0(firstName, lastName), rb_points))) +
+qzn_data %>%
+  filter(position == "RB") %>%
+  group_by(playerId, firstName, lastName, abbrev) %>%  # include abbrev here
+  summarize(rb_points = sum(actualScore, na.rm = TRUE), .groups = "drop") %>%
+  arrange(desc(rb_points)) %>%
+  ggplot(aes(x = rb_points,
+             y = reorder(paste0(firstName, lastName), rb_points),
+             fill = abbrev)) +  # now abbrev is available
   geom_col() +
-  labs(x = "RB Points", y = "Player Name", title = "RB Points by Player") +
+  labs(x = "RB Points", y = "Player Name", title = "RB Points by Player", fill = "Team") +
   theme_minimal()
+
 
 
 qzn_data %>% 
