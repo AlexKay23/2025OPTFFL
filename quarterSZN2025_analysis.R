@@ -169,19 +169,27 @@ qzn_data %>%
   mutate(rb_points = sum(actualScore, na.rm = TRUE)) %>% 
   arrange(desc(rb_points))
 
-ggplot(qzn_data %>% 
-         filter(position == "RB") %>% 
-         group_by(abbrev) %>% 
-         mutate(rb_points = sum(actualScore, na.rm = TRUE)) %>% 
-         arrange(desc(rb_points)),
-       aes(x=reorder(abbrev, -rb_points),y=rb_points))+geom_col()
+qzn_data %>% 
+  filter(position =="RB") %>% 
+  group_by(abbrev) %>% 
+  summarise(rb_points =sum(actualScore, na.rm = TRUE), .groups = "drop") %>% 
+  arrange(desc(rb_points)) %>% 
+  ggplot(aes(x=reorder(abbrev,rb_points),y=rb_points))+
+  geom_col()+
+  labs(x = "Team", y = "RB Points", title = "RB Points by Team") +
+  theme_minimal()
 
-ggplot(qzn_data %>% 
-         filter(position == "WR") %>% 
-         group_by(abbrev) %>% 
-         mutate(rb_points = sum(actualScore, na.rm = TRUE)) %>% 
-         arrange(desc(rb_points)),
-       aes(x=reorder(abbrev, -rb_points),y=rb_points))+geom_col()
+
+qzn_data %>%
+  filter(position == "WR") %>%
+  group_by(abbrev) %>%
+  summarize(wr_points = sum(actualScore, na.rm = TRUE), .groups = "drop") %>%
+  arrange(desc(wr_points)) %>%
+  ggplot(aes(x = reorder(abbrev, wr_points), y = wr_points)) +
+  geom_col() +
+  labs(x = "Team", y = "WR Points", title = "WR Points by Team") +
+  theme_minimal()
+
 
 
 
