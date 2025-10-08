@@ -1,5 +1,7 @@
 # 2025 OPTFFL
 
+![](OPTFFL logo 25.png){width="232"}
+
 Files related to the OPTFFL 2025 Season
 
 ### File Details
