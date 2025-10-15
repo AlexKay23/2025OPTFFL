@@ -3,14 +3,16 @@
 # red = points against
 # order = playoff seed
 
+library(tidyverse)
+library(fflr)
+
+fflr::ffl_id(leagueId = 710908445)
 fflr::tidy_scores(seasonId = 2025) %>% 
   view()
 fflr::draft_recap(seasonId = 2025) %>% 
   group_by(abbrev) %>% 
   summarise(sum = sum(autoDraftTypeId))
 
-fflr::league_simulation(seasonId = 2025) %>% 
-  view()
 fflr::league_standings(seasonId = 2025) %>% 
   view()
 
