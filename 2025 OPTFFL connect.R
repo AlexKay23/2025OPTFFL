@@ -19,7 +19,7 @@ showtext_auto()
 # install.packages("remotes")
 # remotes::install_github("k5cents/fflr")
 
-scoring_week <- 6
+scoring_week <- 7
 
 library(fflr)
 library(nflverse)
@@ -162,9 +162,9 @@ w3_roster <- fflr::team_roster(seasonId = 2025,scoringPeriodId = 3) %>% map(.,as
 w6_roster <- fflr::team_roster(seasonId = 2025,scoringPeriodId = 6) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
   filter(lineupSlot != "BE") %>% group_by(abbrev) %>% mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>%
   select(2,4,17)
-# w7_roster <- fflr::team_roster(seasonId = 2025,scoringPeriodId = 7) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>% 
-#   filter(lineupSlot != "BE") %>% group_by(abbrev) %>% mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>% 
-#   select(2,4,17)
+w7_roster <- fflr::team_roster(seasonId = 2025,scoringPeriodId = 7) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
+  filter(lineupSlot != "BE") %>% group_by(abbrev) %>% mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>%
+  select(2,4,17)
 # w8_roster <- fflr::team_roster(seasonId = 2025,scoringPeriodId = 8) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>% 
 #   filter(lineupSlot != "BE") %>% group_by(abbrev) %>% mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>% 
 #   select(2,4,17)
@@ -192,7 +192,8 @@ d <- list(w1_roster,
           w3_roster,
           w4_roster,
           w5_roster,
-          w6_roster) %>% 
+          w6_roster,
+          w7_roster) %>% 
   reduce(full_join) %>% distinct() %>% inner_join(.,logo)
 
 d_col <- d %>% summarise(all_score = sum(totalScore,na.rm = T)) %>% inner_join(.,logo)
