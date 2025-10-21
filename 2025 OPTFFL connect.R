@@ -331,7 +331,7 @@ standings_table <- league_standings(seasonId = 2025) %>%
     locations = cells_column_labels(columns = c(playoffSeed, record))
   )
 
-gtsave(standings_table,"w6.png")
+gtsave(standings_table,"w7.png")
 
 standings_table %>%  gtsave("StandingsRankings.png",expand=10)
 
@@ -353,14 +353,14 @@ ggplot(d, aes(x = totalScore, y = abbrev, fill = scoringPeriodId))+
 
 ggplot(d_col,aes(x = reorder(abbrev,+all_score),y= all_score))+
   geom_bar(stat = "identity",fill=alpha("darkgreen"))+
-  ylim(-300,800)+
+  ylim(-500,1000)+
   theme_minimal()+
   theme(
     axis.text = element_blank(),
     axis.title = element_blank(),
     panel.grid = element_blank(),
     plot.margin = unit(rep(-2,4),"cm"),
-    plot.background = element_blank()
+    plot.background = element_rect(fill = "#fafafa", color = NA)
     
   )+
   coord_polar()+
