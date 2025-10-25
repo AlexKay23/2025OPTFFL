@@ -19,7 +19,7 @@ showtext_auto()
 # install.packages("remotes")
 # remotes::install_github("k5cents/fflr")
 
-scoring_week <- 7
+scoring_week <- 8
 
 library(fflr)
 library(nflverse)
