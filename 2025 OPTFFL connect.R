@@ -132,15 +132,6 @@ slot_colors <- c("K" = "#ff0073", "D/ST" = "darkcyan", "FLEX" = "#be0000",
 
 
 
-#1f77b4 (Blue)
-#ff7f0e (Orange)
-#2ca02c (Green)
-#d62728 (Red)
-#9467bd (Purple)
-#8c564b (Brown)
-#e377c2 (Pink)
-
-
 ## Total Running Score
 
 
@@ -278,25 +269,6 @@ ggplot(d,aes(x=abbrev,y=totalScore))+geom_boxplot(aes(size = totalScore))
 
 
 
-
-### what if we did it by position and filled it by team?
-
-#Biggest_Bench
-# roster_data %>% 
-#   filter(lineupSlot == "BE") %>% 
-#   arrange(desc(actualScore)) %>% view()
-# 
-# roster_data %>% 
-#   filter(lineupSlot == "BE") %>% 
-#   summarise(total_points = sum(actualScore,na.rm = T))
-# 
-# 
-# roster_data %>% 
-#   filter(lineupSlot != "BE") %>% 
-#   mutate(diff = projectedScore - actualScore) %>% 
-#   select(4,5,8,6,12,13,17) %>% 
-#   arrange(desc(diff)) %>% view()
-
 # Ranking Table
 
 standings_table <- league_standings(seasonId = 2025) %>% 
@@ -367,14 +339,3 @@ ggplot(d_col,aes(x = reorder(abbrev,+all_score),y= all_score))+
   coord_polar()+
   geom_image(aes(image = logo),
              size = 0.08,position = position_stack(vjust = 1.26))
-#####
-# szn_stat_2024 <- nflreadr::load_player_stats(seasons = most_recent_season(),stat_type = "offense")
-# rushing <- nflreadr::load_nextgen_stats(seasons = most_recent_season(),stat_type = "rushing")
-# recing <- nflreadr::load_nextgen_stats(seasons = most_recent_season(),stat_type = "receiving")
-# 
-# 
-# colnames(load_pbp(seasons = most_recent_season()))
-# 
-# pbp_2024 <- load_pbp(seasons = 2024)
-# 
-# m <- load_ff_opportunity(seasons = 2024,stat_type = "weekly")
