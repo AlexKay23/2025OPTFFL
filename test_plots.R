@@ -150,17 +150,5 @@ ggplot(scatterplot_data_chart_data, aes(x = pointsFor, y = pointsAgainst)) +
 
 
 
-# Luck Index
-# luck_index = (actual_wins - expected_wins) +
-#   (league_avg_pa - team_pa) / sd_pa +
-#   (close_wins * 0.5) -
-#   (high_score_losses * 0.5)
-
-# sd_pa = standard deviation of points against
-# close wins is wins of less than 5 points
-# high_score_losses = losses while scoring 4th or more points that week
-
-
-
 
 
