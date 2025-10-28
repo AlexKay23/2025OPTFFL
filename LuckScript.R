@@ -4,11 +4,12 @@ library(fflr)
 library(ggimage)
 
 ffl_id(leagueId = "710908445")
+tidy_scores <- fflr::tidy_scores()
 
 matchups_with_margin <- tidy_scores %>%
-  inner_join(tidy_scores, by = c("matchupId", "matchupPeriodId"), suffix = c("", "_opp")) %>%
-  filter(teamId != teamId_opp) %>%
-  filter(totalPoints > 0) %>% 
+  inner_join(tidy_scores, by = c("matchupId", "matchupPeriodId"), suffix = c("", "_opp")) %>% # Join the dataset to itself to pair each team with its opponent in the same matchup.
+  filter(teamId != teamId_opp) %>% # Then filter out self-pairings and calculate the margin between team and opponent scores.
+  filter(totalPoints > 0) %>%  #filter out match ups that have not happened yet
   mutate(margin = totalPoints - totalPoints_opp) %>%
   select(seasonId, matchupPeriodId, matchupId, teamId, abbrev, isHome, totalPoints, isWinner, expectedWins, margin) %>% 
   mutate(luck_category = case_when(
@@ -16,21 +17,22 @@ matchups_with_margin <- tidy_scores %>%
     isWinner == FALSE & margin > -10 ~ "Unfortunate Loss",
     isWinner == TRUE & margin >= 10 ~ "Convincing Win",
     isWinner == FALSE & margin <= -10 ~ "Clear Loss",
-    TRUE ~ "Uncategorized"))
+    TRUE ~ "Uncategorized")) # categorize how close a match up result is
 
 
 team_luck_summary <- matchups_with_margin %>% 
   group_by(teamId,abbrev) %>% 
   summarize(fortunate_wins = sum(luck_category == "Fortunate Win"),
             unfortunate_losses = sum(luck_category == "Unfortunate Loss"),
-            total_matchups = n()) %>% 
-  mutate(net_luck = fortunate_wins-unfortunate_losses)
+            total_matchups = n()) %>%  #total count of unfortunate wins and losses
+  mutate(net_luck = fortunate_wins-unfortunate_losses) #lucky in your match up results overall?
 
 team_margin_stats <- matchups_with_margin %>% 
   group_by(teamId,abbrev) %>% 
-  summarize(avg_margin = mean(margin),
-            median_margin = median(margin),
-            sd_margin = sd(margin))
+  summarize(avg_margin = mean(margin), # what is your avg margin of win/loss
+            median_margin = median(margin), # medain margin win/los
+            sd_margin = sd(margin)) # the spread/consistency
+#overall strength and consistency of match up results 
 
 team_win_efficiency <- matchups_with_margin %>% 
   group_by(teamId,abbrev) %>% 
