@@ -60,8 +60,8 @@ w7_roster_Qszn <- fflr::team_roster(seasonId = 2025,scoringPeriodId = 7) %>% map
   filter(lineupSlot != "BE")
 w8_roster_Qszn <- fflr::team_roster(seasonId = 2025,scoringPeriodId = 8) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
   filter(lineupSlot != "BE")
-# w9_roster_Qszn <- fflr::team_roster(seasonId = 2025,scoringPeriodId = 9) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>% 
-#   filter(lineupSlot != "BE")
+w9_roster_Qszn <- fflr::team_roster(seasonId = 2025,scoringPeriodId = 9) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
+  filter(lineupSlot != "BE")
 # w10_roster_Qszn <- fflr::team_roster(scoringPeriodId = 10) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>% 
 #   filter(lineupSlot != "BE")
 # w11_roster_Qszn <- fflr::team_roster(seasonId = 2025,scoringPeriodId = 11) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>% 
@@ -82,7 +82,8 @@ qzn_data <- list(w1_roster_Qszn,
      w5_roster_Qszn,
      w6_roster_Qszn,
      w7_roster_Qszn,
-     w8_roster_Qszn) %>% 
+     w8_roster_Qszn,
+     w9_roster_Qszn) %>% 
   reduce(full_join) %>% distinct() %>% inner_join(.,logo)
 
 
@@ -251,7 +252,7 @@ OPTFFL_team_colors <- c("KAY" = "#909090",
                         "YARN" = "#ed2246"
 )
 
-ggplot(weekly_scores, aes(x = weeklyScore, y = abbrev, group = abbrev, fill = abbrev)) +
+final_score_density <- ggplot(weekly_scores, aes(x = weeklyScore, y = abbrev, group = abbrev, fill = abbrev)) +
   geom_density_ridges() +
   facet_wrap(~division, scales = "free_y", nrow = 1) +
   scale_fill_manual(values = OPTFFL_team_colors)+
@@ -271,6 +272,9 @@ ggplot(weekly_scores, aes(x = weeklyScore, y = abbrev, group = abbrev, fill = ab
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank())
 
+today <- lubridate::today()
+ggsave(plot = final_score_density,filename = paste0("plots/",today,"_ScoreDensityPlot.png"))
+
 ggplot(weekly_scores, aes(x=weeklyScore,y=abbrev,fill = abbrev))+
   geom_boxplot(fill="darkgreen")+
   geom_point()+
@@ -280,10 +284,16 @@ standings_data <- fflr::league_standings(seasonId = 2025) %>%
   inner_join(.,logo) %>% 
   mutate(record = paste(wins,losses, sep = "-"))
 
-
-ggplot(standings_data,
+library(ggforce)
+points_4_against <-ggplot(standings_data %>% mutate(playoffStatus = case_when(playoffSeed<9~"Playoffs",
+                                                           playoffSeed>8~"Non Playoff")),
        aes(x=pointsFor,y=pointsAgainst))+
   geom_point()+
+  geom_circle(
+    aes(x0 = pointsFor, y0 = pointsAgainst, r = 25, fill = playoffStatus),
+    alpha = 0.45,
+    color = NA)+
+  scale_fill_manual(values = c("Playoffs" = "green", "Non Playoff" = "red"))+
   geom_image(aes(image = logo),
              size = .15)+
   # geom_text(label = standings_data$record,
@@ -292,16 +302,21 @@ ggplot(standings_data,
   #           size = 5,fontface = "bold")+
   labs(title = "Points For vs Points Against",
        x = "Points For",
-       y = "Points Against")+
+       y = "Points Against",
+       fill = "Playoff Status")+
   geom_vline(xintercept = mean(standings_data$pointsFor),color="darkgreen",linewidth=1.5,alpha=0.4)+
   geom_hline(yintercept = mean(standings_data$pointsAgainst),color="darkgreen",linewidth=1.5,alpha=0.4)+
-  # annotate("text",y = mean(standings_data$pointsAgainst)+5,x=425,label="avg pts against")+
-  # annotate("text",x=mean(standings_data$pointsFor)-5,y=265,label="avg pts For",angle=90)+
-  annotate("text",x= 280,y=220,label = "Weak Performances",size=5,fontface="bold")+
-  annotate("text",x= 350, y=270, label = "Easy Schedule",size=5,fontface="bold")+
-  annotate("text",x= 350, y= 370, label= "Battle Tested",size=5,fontface="bold")+
-  annotate("text",x= 280,y=370,label="Tough Schedule",size=5,fontface="bold")+
+  annotate("text",y = mean(standings_data$pointsAgainst)+5,x=1100,label="avg pts against")+
+  annotate("text",x=mean(standings_data$pointsFor)-5,y=950,label="avg pts For",angle=90)+
+  annotate("text",x= 750,y=770,label = "Weak Performances",size=5,fontface="bold")+
+  annotate("text",x= 1090, y=770, label = "Easy Schedule",size=5,fontface="bold")+
+  annotate("text",x= 1090, y= 1000, label= "Battle Tested",size=5,fontface="bold")+
+  annotate("text",x= 750,y=1000,label="Tough Schedule",size=5,fontface="bold")+
   theme_bw()+
+  coord_cartesian(
+    xlim = range(standings_data$pointsFor) + c(-20, 20),
+    ylim = range(standings_data$pointsAgainst) + c(-20, 20)
+  )+
   theme(text = element_text(family = "Trebuchet",face = "bold"),
         plot.title = element_text(hjust = 0.5,size = 24),
         axis.title.x = element_text(size = 20,family = "Trebuchet",face = "bold"),
@@ -311,10 +326,13 @@ ggplot(standings_data,
         panel.background = element_rect(fill = "#fafafa", color = NA),
         plot.background = element_rect(fill = "#fafafa", color = NA),
         panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank())
+        panel.grid.minor = element_blank(),
+        legend.position = "bottom",
+        legend.background = element_rect(fill = "#fafafa", color = NA))
 
+today <- lubridate::today()
 
-
+ggsave(plot = points_4_against,filename = paste0("plots/",today,"_PointsVsAgainst.png"))
 
 
 

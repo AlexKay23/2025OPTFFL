@@ -147,8 +147,69 @@ ggplot(scatterplot_data_chart_data, aes(x = pointsFor, y = pointsAgainst)) +
   )
 
 
+source("2025 OPTFFL Connect.R")
+
+standings_table <- league_standings(seasonId = 2025) %>% 
+  inner_join(.,logo) %>%
+  mutate(record = paste(wins,losses, sep = "-")) %>% 
+  mutate(name = case_when(
+    abbrev == "KAY" ~ "Alex",
+    abbrev == "BTW" ~ "Amanda",
+    abbrev == "CW" ~ "Virginia",
+    abbrev == "KAS" ~ "Kyle",
+    abbrev == "BWb" ~ "Bill",
+    abbrev == "YARN" ~ "Ashley",
+    abbrev == "JOHN" ~ "John",
+    abbrev == "OPE" ~ "JJ",
+    abbrev == "CNP" ~ "Cass",
+    abbrev == "JFT" ~ "Jeanne",
+    abbrev == "JOSh" ~ "Josh",
+    abbrev == "TCC" ~ "Ellen",
+    abbrev == "LLL" ~ "Luke",
+    abbrev == "JII" ~ "Jacob",
+    abbrev == "GPG" ~ "Catie",
+    abbrev == "EET" ~ "Emily")) %>% 
+  select("logo","name","playoffSeed","record") %>% 
+  arrange(playoffSeed) %>% 
+  gt() %>%
+  text_transform(
+    locations = cells_body(columns = c(logo)),
+    fn = function(x) {
+      web_image(url = x, height = 50)
+    }
+  ) %>%
+  cols_label(
+    playoffSeed = "Playoff Seed",
+    logo = "",
+    name = "Name",
+    record = "Record"
+  ) %>% 
+  tab_style(
+    style = cell_text(size = px(40)),  # Adjust the size as needed
+    locations = cells_body(columns = c(name, playoffSeed, record))
+  ) %>% 
+  cols_align(
+    align = "center",
+    columns = c(name, playoffSeed)
+  ) %>% 
+  tab_options(
+    table.background.color = "#fafafa",
+    table.border.top.color = "#fafafa",
+    table.border.bottom.color = "#fafafa"
+  ) %>% 
+  tab_style(
+    style = cell_text(font = "Trebuchet", weight = "bold", size = px(20)),
+    locations = cells_column_labels(columns = c(name,playoffSeed, record))
+  ) %>% 
+  tab_style(
+    style = cell_text(font = "Trebuchet MS", weight = "bold", size = px(20)),
+    locations = cells_column_labels(columns = c(name, playoffSeed, record))
+  )
 
 
+today <- lubridate::today()
+
+gtsave(data = standings_table, filename = paste0("plots/",today,"_standings_table.png"))
 
 
 

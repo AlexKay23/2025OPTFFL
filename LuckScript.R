@@ -68,7 +68,7 @@ team_luckiness <- team_luck_summary %>%
 logo <- fflr::league_teams(seasonId = 2025) %>% 
   select(2:4)
 
-ggplot(team_luckiness %>% inner_join(.,logo,by="abbrev"), aes(x=fct_reorder(abbrev, luck_score),y=luck_score))+
+luck_plot <- ggplot(team_luckiness %>% inner_join(.,logo,by="abbrev"), aes(x=fct_reorder(abbrev, luck_score),y=luck_score))+
   geom_col(fill="darkgreen")+
   geom_image(aes(image = logo),size=0.09)+
   labs(y="<- Unlucky        Lucky ->")+
@@ -79,3 +79,6 @@ ggplot(team_luckiness %>% inner_join(.,logo,by="abbrev"), aes(x=fct_reorder(abbr
         axis.ticks.y = element_blank(),
         axis.text.y = element_text(face = "bold",size = 13),
         axis.title.y = element_text(face = "bold", size = 18))
+today <- lubridate::today()
+
+ggsave(plot = luck_plot,filename = paste0("plots/",today,"_luckPlot.png"))
