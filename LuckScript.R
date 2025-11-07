@@ -57,7 +57,11 @@ team_def_press <- matchups_with_margin %>%
 team_luckiness <- team_luck_summary %>% 
   left_join(team_win_efficiency, by=c("teamId","abbrev")) %>% 
   left_join(team_def_press, by=c("teamId","abbrev")) %>% 
-  mutate(luck_score = net_luck +win_diff - press_diff)
+  left_join(team_margin_stats, by=c("teamId","abbrev")) %>% 
+  mutate(luck_score = net_luck + win_diff - press_diff)
+
+
+
 # negative = less lucky, positive = more lucky
 
 
