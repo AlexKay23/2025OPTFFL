@@ -23,7 +23,7 @@ fflr::ffl_id(leagueId = 710908445)
 
 # Load Data ####
 
-scoring_week <- 5
+scoring_week <- 10
 
 logo <- league_teams(seasonId = 2025) %>% 
   select(2:4)
@@ -62,8 +62,8 @@ w8_roster_Qszn <- fflr::team_roster(seasonId = 2025,scoringPeriodId = 8) %>% map
   filter(lineupSlot != "BE")
 w9_roster_Qszn <- fflr::team_roster(seasonId = 2025,scoringPeriodId = 9) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
   filter(lineupSlot != "BE")
-# w10_roster_Qszn <- fflr::team_roster(scoringPeriodId = 10) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>% 
-#   filter(lineupSlot != "BE")
+w10_roster_Qszn <- fflr::team_roster(scoringPeriodId = 10) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
+  filter(lineupSlot != "BE")
 # w11_roster_Qszn <- fflr::team_roster(seasonId = 2025,scoringPeriodId = 11) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>% 
 #   filter(lineupSlot != "BE")
 # w12_roster_Qszn <- fflr::team_roster(seasonId = 2025,scoringPeriodId = 12) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>% 
@@ -83,7 +83,8 @@ qzn_data <- list(w1_roster_Qszn,
      w6_roster_Qszn,
      w7_roster_Qszn,
      w8_roster_Qszn,
-     w9_roster_Qszn) %>% 
+     w9_roster_Qszn,
+     w10_roster_Qszn) %>% 
   reduce(full_join) %>% distinct() %>% inner_join(.,logo)
 
 
@@ -262,13 +263,13 @@ final_score_density <- ggplot(weekly_scores, aes(x = weeklyScore, y = abbrev, gr
         panel.background = element_rect(fill = "#fafafa", color = NA),
         plot.background = element_rect(fill = "#fafafa", color = NA),
         strip.background = element_rect(fill = "#fafafa", color = NA),
-        strip.text.x.top = element_text(size=18),
+        strip.text.x.top = element_text(size=24),
         text = element_text(family = "Trebuchet",face = "bold"),
-        plot.title = element_text(hjust = 0.5,size = 24),
+        plot.title = element_text(hjust = 0.5,size = 36),
         axis.title.y = element_blank(),
-        axis.text.y = element_text(size=15),
-        axis.title.x = element_text(size = 20),
-        axis.text.x = element_text(size = 15),
+        axis.text.y = element_text(size=24),
+        axis.title.x = element_text(size = 30),
+        axis.text.x = element_text(size = 24),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank())
 
