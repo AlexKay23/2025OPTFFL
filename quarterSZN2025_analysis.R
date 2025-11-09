@@ -309,21 +309,21 @@ points_4_against <-ggplot(standings_data %>% mutate(playoffStatus = case_when(pl
   geom_hline(yintercept = mean(standings_data$pointsAgainst),color="darkgreen",linewidth=1.5,alpha=0.4)+
   annotate("text",y = mean(standings_data$pointsAgainst)+5,x=1100,label="avg pts against")+
   annotate("text",x=mean(standings_data$pointsFor)-5,y=950,label="avg pts For",angle=90)+
-  annotate("text",x= 750,y=770,label = "Weak Performances",size=5,fontface="bold")+
-  annotate("text",x= 1090, y=770, label = "Easy Schedule",size=5,fontface="bold")+
-  annotate("text",x= 1090, y= 1000, label= "Battle Tested",size=5,fontface="bold")+
-  annotate("text",x= 750,y=1000,label="Tough Schedule",size=5,fontface="bold")+
+  annotate("text",x= 750,y=770,label = "Weak Performances",size=7,fontface="bold")+
+  annotate("text",x= 1090, y=770, label = "Easy Schedule",size=7,fontface="bold")+
+  annotate("text",x= 1090, y= 1000, label= "Battle Tested",size=7,fontface="bold")+
+  annotate("text",x= 750,y=1000,label="Tough Schedule",size=7,fontface="bold")+
   theme_bw()+
   coord_cartesian(
     xlim = range(standings_data$pointsFor) + c(-20, 20),
     ylim = range(standings_data$pointsAgainst) + c(-20, 20)
   )+
   theme(text = element_text(family = "Trebuchet",face = "bold"),
-        plot.title = element_text(hjust = 0.5,size = 24),
-        axis.title.x = element_text(size = 20,family = "Trebuchet",face = "bold"),
-        axis.text.x = element_text(size = 15),
-        axis.title.y = element_text(size = 20,family = "Trebuchet",face = "bold"),
-        axis.text.y = element_text(size = 15),
+        plot.title = element_text(hjust = 0.5,size = 40),
+        axis.title.x = element_text(size = 30,family = "Trebuchet",face = "bold"),
+        axis.text.x = element_text(size = 25),
+        axis.title.y = element_text(size = 30,family = "Trebuchet",face = "bold"),
+        axis.text.y = element_text(size = 25),
         panel.background = element_rect(fill = "#fafafa", color = NA),
         plot.background = element_rect(fill = "#fafafa", color = NA),
         panel.grid.major = element_blank(),
