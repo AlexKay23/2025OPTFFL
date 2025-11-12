@@ -77,8 +77,8 @@ luck_plot <- ggplot(team_luckiness %>% inner_join(.,logo,by="abbrev"), aes(x=fct
         axis.ticks.x = element_blank(),
         axis.text.x = element_blank(),
         axis.ticks.y = element_blank(),
-        axis.text.y = element_text(face = "bold",size = 13),
-        axis.title.y = element_text(face = "bold", size = 18))
+        axis.text.y = element_text(face = "bold",size = 25),
+        axis.title.y = element_text(face = "bold", size = 45))
 today <- lubridate::today()
 
 ggsave(plot = luck_plot,filename = paste0("plots/",today,"_luckPlot.png"))
