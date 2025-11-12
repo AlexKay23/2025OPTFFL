@@ -307,12 +307,12 @@ points_4_against <-ggplot(standings_data %>% mutate(playoffStatus = case_when(pl
        fill = "Playoff Status")+
   geom_vline(xintercept = mean(standings_data$pointsFor),color="darkgreen",linewidth=1.5,alpha=0.4)+
   geom_hline(yintercept = mean(standings_data$pointsAgainst),color="darkgreen",linewidth=1.5,alpha=0.4)+
-  annotate("text",y = mean(standings_data$pointsAgainst)+5,x=1100,label="avg pts against")+
-  annotate("text",x=mean(standings_data$pointsFor)-5,y=950,label="avg pts For",angle=90)+
-  annotate("text",x= 750,y=770,label = "Weak Performances",size=7,fontface="bold")+
-  annotate("text",x= 1090, y=770, label = "Easy Schedule",size=7,fontface="bold")+
-  annotate("text",x= 1090, y= 1000, label= "Battle Tested",size=7,fontface="bold")+
-  annotate("text",x= 750,y=1000,label="Tough Schedule",size=7,fontface="bold")+
+  annotate("text",y = mean(standings_data$pointsAgainst)+5,x=1180,label="avg pts against",size=10)+
+  annotate("text",x=mean(standings_data$pointsFor)-5,y=1050,label="avg pts For",angle=90, size=10)+
+  annotate("text",x= 850,y=870,label = "Weak Performances",size=10,fontface="bold")+
+  annotate("text",x= 1190, y=870, label = "Easy Schedule",size=10,fontface="bold")+
+  annotate("text",x= 1190, y= 1100, label= "Battle Tested",size=10,fontface="bold")+
+  annotate("text",x= 850,y=1100,label="Tough Schedule",size=10,fontface="bold")+
   theme_bw()+
   coord_cartesian(
     xlim = range(standings_data$pointsFor) + c(-20, 20),
