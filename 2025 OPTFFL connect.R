@@ -19,7 +19,7 @@ showtext_auto()
 # install.packages("remotes")
 # remotes::install_github("k5cents/fflr")
 
-scoring_week <- 10
+scoring_week <- 11
 
 library(fflr)
 library(nflverse)
@@ -165,9 +165,9 @@ w9_roster <- fflr::team_roster(seasonId = 2025,scoringPeriodId = 9) %>% map(.,as
 w10_roster <- fflr::team_roster(scoringPeriodId = 10) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
   filter(lineupSlot != "BE") %>% group_by(abbrev) %>% mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>%
   select(2,4,17)
-# w11_roster <- fflr::team_roster(scoringPeriodId = 11) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>% 
-#   filter(lineupSlot != "BE") %>% group_by(abbrev) %>% mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>% 
-#   select(2,4,17)
+w11_roster <- fflr::team_roster(scoringPeriodId = 11) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
+  filter(lineupSlot != "BE") %>% group_by(abbrev) %>% mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>%
+  select(2,4,17)
 # w12_roster <- fflr::team_roster(scoringPeriodId = 12) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>% 
 #   filter(lineupSlot != "BE") %>% group_by(abbrev) %>% mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>% 
 #   select(2,4,17)
@@ -187,7 +187,8 @@ d <- list(w1_roster,
           w7_roster,
           w8_roster,
           w9_roster,
-          w10_roster) %>% 
+          w10_roster,
+          w11_roster) %>% 
   reduce(full_join) %>% distinct() %>% inner_join(.,logo)
 
 d_col <- d %>% summarise(all_score = sum(totalScore,na.rm = T)) %>% inner_join(.,logo)
@@ -306,7 +307,7 @@ standings_table <- league_standings(seasonId = 2025) %>%
     locations = cells_column_labels(columns = c(playoffSeed, record))
   )
 
-gtsave(standings_table,"standingsPictures/w10.png")
+gtsave(standings_table,"standingsPictures/w11.png")
 
 standings_table %>%  gtsave("standingsPictures/StandingsRankings.png",expand=10)
 
