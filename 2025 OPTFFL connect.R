@@ -171,9 +171,9 @@ w11_roster <- fflr::team_roster(scoringPeriodId = 11) %>% map(.,as_tibble) %>% m
 w12_roster <- fflr::team_roster(scoringPeriodId = 12) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
   filter(lineupSlot != "BE") %>% group_by(abbrev) %>% mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>%
   select(2,4,17)
-# w13_roster <- fflr::team_roster(scoringPeriodId = 13) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>% 
-#   filter(lineupSlot != "BE") %>% group_by(abbrev) %>% mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>% 
-#   select(2,4,17)
+w13_roster <- fflr::team_roster(scoringPeriodId = 13) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
+  filter(lineupSlot != "BE") %>% group_by(abbrev) %>% mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>%
+  select(2,4,17)
 # w14_roster <- fflr::team_roster(scoringPeriodId = 14) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>% 
 #   filter(lineupSlot != "BE") %>% group_by(abbrev) %>% mutate(totalScore = sum(actualScore,na.rm = TRUE)) %>% 
 #   select(2,4,17)
@@ -189,7 +189,8 @@ d <- list(w1_roster,
           w9_roster,
           w10_roster,
           w11_roster,
-          w12_roster) %>% 
+          w12_roster,
+          w13_roster) %>% 
   reduce(full_join) %>% distinct() %>% inner_join(.,logo)
 
 d_col <- d %>% summarise(all_score = sum(totalScore,na.rm = T)) %>% inner_join(.,logo)
@@ -308,7 +309,7 @@ standings_table <- league_standings(seasonId = 2025) %>%
     locations = cells_column_labels(columns = c(playoffSeed, record))
   )
 
-gtsave(standings_table,"standingsPictures/w12.png")
+gtsave(standings_table,"standingsPictures/w13.png")
 
 standings_table %>%  gtsave("standingsPictures/StandingsRankings.png",expand=10)
 
