@@ -64,12 +64,12 @@ w9_roster_Qszn <- fflr::team_roster(seasonId = 2025,scoringPeriodId = 9) %>% map
   filter(lineupSlot != "BE")
 w10_roster_Qszn <- fflr::team_roster(scoringPeriodId = 10) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
   filter(lineupSlot != "BE")
-# w11_roster_Qszn <- fflr::team_roster(seasonId = 2025,scoringPeriodId = 11) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>% 
-#   filter(lineupSlot != "BE")
-# w12_roster_Qszn <- fflr::team_roster(seasonId = 2025,scoringPeriodId = 12) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>% 
-#   filter(lineupSlot != "BE")
-# w13_roster_Qszn <- fflr::team_roster(seasonId = 2025,scoringPeriodId = 13) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>% 
-#   filter(lineupSlot != "BE")
+w11_roster_Qszn <- fflr::team_roster(seasonId = 2025,scoringPeriodId = 11) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
+  filter(lineupSlot != "BE")
+w12_roster_Qszn <- fflr::team_roster(seasonId = 2025,scoringPeriodId = 12) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
+  filter(lineupSlot != "BE")
+w13_roster_Qszn <- fflr::team_roster(seasonId = 2025,scoringPeriodId = 13) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>%
+  filter(lineupSlot != "BE")
 # w14_roster_Qszn <- fflr::team_roster(seasonId = 2025,scoringPeriodId = 14) %>% map(.,as_tibble) %>% map_dfr(.,~.x) %>% 
 #   filter(lineupSlot != "BE")
 
@@ -84,7 +84,10 @@ qzn_data <- list(w1_roster_Qszn,
      w7_roster_Qszn,
      w8_roster_Qszn,
      w9_roster_Qszn,
-     w10_roster_Qszn) %>% 
+     w10_roster_Qszn,
+     w11_roster_Qszn,
+     w12_roster_Qszn,
+     w13_roster_Qszn) %>% 
   reduce(full_join) %>% distinct() %>% inner_join(.,logo)
 
 
